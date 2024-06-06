@@ -1,5 +1,6 @@
 import UIKit
 import Foundation
+import AVFoundation
 
 class ViewController: UIViewController {
     @IBOutlet weak var progressBar: UIProgressView!
@@ -24,6 +25,22 @@ class ViewController: UIViewController {
         var shouldAutorotate: Bool {
                return true
            }
+    }
+    
+    var player: AVAudioPlayer?
+
+    func playSound() {
+        guard let path = Bundle.main.path(forResource: "alarm_sound", ofType:"mp3") else {
+            return }
+        let url = URL(fileURLWithPath: path)
+
+        do {
+            player = try AVAudioPlayer(contentsOf: url)
+            player?.play()
+            
+        } catch let error {
+            print(error.localizedDescription)
+        }
     }
     
     let eggTimes = ["Soft": 8, "Medium": 10, "Hard": 12]
@@ -60,6 +77,7 @@ class ViewController: UIViewController {
                 self.progressBar.progress = 1.0 // Ensure the progress bar is fully filled
                 self.doneLabel.text = "DONE!"
                 self.doneLabel.alpha = 1
+                playSound()                
                 timer.invalidate()
             }
         }
